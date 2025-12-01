@@ -70,30 +70,6 @@ Before running this project, make sure you have:
 | PUT | `/api/products/{id}` | Update product |
 | DELETE | `/api/products/{id}` | Delete product |
 
-## 🗄️ Database Schema
-
-### Products Table
-
-```sql
-- Id (int, Primary Key)
-- Name (string)
-- Description (string)
-- Price (decimal)
-- Category (string)
-- Stock (int)
-- CreatedAt (datetime)
-- UpdatedAt (datetime)
-```
-
-## 🔐 Configuration
-
-Edit `appsettings.json` to configure:
-
-- Database connection string
-- Logging levels
-- CORS policies
-- API settings
-
 ## 🧪 Testing
 
 Run tests with:
@@ -114,10 +90,6 @@ dotnet publish -c Release -o ./publish
 3. Commit your changes (`git commit -m 'Add some AmazingFeature'`)
 4. Push to the branch (`git push origin feature/AmazingFeature`)
 5. Open a Pull Request
-
-## 📝 License
-
-This project is licensed under the MIT License - see the [LICENSE](LICENSE) file for details.
 
 ## 👤 Author
 
