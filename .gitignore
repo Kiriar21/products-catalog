@@ -1,0 +1,11 @@
+bin/
+obj/
+.idea/
+NSIX-task.sln.DotSettings.user
+.env
+.env.prod
+!.env.example
+config/
+init-sql/init-user-and-db.sql
+NSIX-task.sln
+*.globalconfig

@@ -1,0 +1,51 @@
+name: Localhost-dev
+services:
+  mssql-products:
+    image: mcr.microsoft.com/mssql/server:2022-latest
+    container_name: mssql-products-local
+    restart: always
+    environment:
+      ACCEPT_EULA: "Y"
+      MSSQL_SA_PASSWORD: ${MSSQL_SA_PASSWORD}
+    volumes:
+      - sql_data_products:/var/opt/mssql
+      - ./init-sql:/init-sql
+    ports:
+      - "1433:1433"
+
+  seq: 
+    image: datalust/seq:latest
+    container_name: seq-local
+    restart: always
+    environment:
+      ACCEPT_EULA: "Y"
+      SEQ_FIRSTRUN_ADMINPASSWORD: ${SEQ_FIRSTRUN_ADMINPASSWORD}
+    ports:
+      - "5342:80"
+    volumes:
+      - seq_data:/data
+
+  db-seed:
+    image: mcr.microsoft.com/mssql-tools
+    depends_on:
+      - mssql-products
+    environment:
+      SQLCMDPASSWORD: ${MSSQL_SA_PASSWORD}
+    volumes:
+      - ./init-sql:/init-sql
+    entrypoint: >
+      /bin/bash -euo pipefail -c "
+      echo 'Waiting for SQL Server...';
+      until /opt/mssql-tools/bin/sqlcmd -S mssql-products -U sa -P \"$${SQLCMDPASSWORD}\" -Q 'SELECT 1' >/dev/null 2>&1; do
+        sleep 2;
+      done;
+      echo 'SQL is responding, creating database...';
+      /opt/mssql-tools/bin/sqlcmd -S mssql-products -U sa -P \"$${SQLCMDPASSWORD}\" -b -i /init-sql/init-sql.sql;
+      echo 'Database created (if not existing).';
+      "
+
+
+
+volumes:
+  sql_data_products: {}
+  seq_data: {}
